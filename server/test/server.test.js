@@ -151,3 +151,81 @@ describe ('DELETE /todos:id', () => {
       .end(done);
   });
 });
+
+describe ('PATCH /todos:id', () => {
+  it ('should update a new todo', (done) => {
+    var hexId = todos[1]._id.toHexString();
+
+    var body = {
+      text: 'Test todo text',
+      completed: true
+    };
+
+    request(app)
+      .patch(`/todos/${hexId}`)
+      .send(body)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.todo.text).toBe(body.text);
+        expect(res.body.todo.completed).toBe(body.completed);
+        expect(res.body.todo.completedAt).toExist();
+      })
+      .end ((err, res) => {
+        if (err) {
+          return done(err);
+        }
+
+        Todo.findById(hexId).then((todo) => {
+          expect(todo.text).toBe(body.text);
+          expect(todo.completed).toBe(body.completed);
+          expect(res.body.todo.completedAt).toBeA("number");
+          done()
+        }).catch ((e) => done(e));
+     });
+  });
+
+  it ('should update a new todo completed set to false', (done) => {
+    var hexId = todos[1]._id.toHexString();
+
+    var body = {
+      completed: false
+    };
+
+    request(app)
+      .patch(`/todos/${hexId}`)
+      .send(body)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.todo.completed).toBe(body.completed);
+        expect(res.body.todo.completedAt).toNotExist();
+      })
+      .end ((err, res) => {
+        if (err) {
+          return done(err);
+        }
+
+        Todo.findById(hexId).then((todo) => {
+          expect(todo.completed).toBe(body.completed);
+          expect(res.body.todo.completedAt).toNotExist();
+          done()
+        }).catch ((e) => done(e));
+    });
+  });
+
+  it ('should not update todo with invalid body data', (done) => {
+    var hexId = '123';
+
+    var body = {
+      completed: false
+    };
+
+    request(app)
+      .patch(`/todos/${hexId}`)
+      .send(body)
+      .expect(404)
+      //.expect((res) => {
+      //  expect(res.body.text).toBe(text);
+      //})
+      .end (done);
+  });
+});
