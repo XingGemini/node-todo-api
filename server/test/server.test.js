@@ -138,7 +138,7 @@ describe ('DELETE /todos:id', () => {
   it ('should return 404 if todo not found during DELETE', (done) => {
     var id = new ObjectID();
     request(app)
-      .get(`/todos/${id.toHexString()}`)
+      .delete(`/todos/${id.toHexString()}`)
       .expect(404)
       .end(done);
   });
@@ -146,7 +146,7 @@ describe ('DELETE /todos:id', () => {
   it ('should return 404 if non-object during DELETE', (done) => {
     var id = new ObjectID();
     request(app)
-      .get(`/todos/123`)
+      .delete(`/todos/123`)
       .expect(404)
       .end(done);
   });
