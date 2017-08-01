@@ -3,16 +3,27 @@ const {ObjectID} = require ('mongodb');
 const {Todo} = require('./../../models/todo');
 const {User} = require('./../../models/user');
 
+const userOneId = new ObjectID();
+const userTwoId = new ObjectID();
+
 const todos = [
     {
       _id : new ObjectID(),
-      text : "Todo 1"},
+      text : "Todo 1",
+      _creator: userOneId
+    },
     {
       _id : new ObjectID(),
-      text : "Todo 2"},
+      text : "Todo 2",
+      completed: true,
+      completedAt: 333,
+      _creator: userTwoId
+    },
     {
       _id : new ObjectID(),
-      text : "Todo 3"}
+      text : "Todo 3",
+      _creator: userOneId
+    }
 ];
 
 
@@ -21,10 +32,6 @@ const populateTodos = (done) => {
     return Todo.insertMany(todos);
   }).then (() => done());
 };
-
-
-const userOneId = new ObjectID();
-const userTwoId = new ObjectID();
 
 const users = [
     {

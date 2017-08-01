@@ -19,6 +19,7 @@ describe ('POST /todos', () => {
 
     request(app)
       .post('/todos')
+      .set('x-auth', users[0].tokens[0].token)
       .send({text})
       .expect(200)
       .expect((res) => {
@@ -29,9 +30,9 @@ describe ('POST /todos', () => {
           return done(err);
         }
 
-        Todo.find().then((todos) => {
-          expect(todos.length).toBe(4);
-          expect(todos[3].text).toBe(text);
+        Todo.find({_creator: users[0]._id}).then((todos) => {
+          expect(todos.length).toBe(3);
+          expect(todos[2].text).toBe(text);
           done()
         }).catch ((e) => done(e));
       });
@@ -42,6 +43,7 @@ describe ('POST /todos', () => {
 
     request(app)
       .post('/todos')
+      .set('x-auth', users[0].tokens[0].token)
       .send({text})
       .expect(400)
       //.expect((res) => {
@@ -52,8 +54,8 @@ describe ('POST /todos', () => {
           return done(err);
         }
 
-        Todo.find().then((todos) => {
-          expect(todos.length).toBe(3);
+        Todo.find({_creator: users[0]._id}).then((todos) => {
+          expect(todos.length).toBe(2);
           //expect(todos[0].text).toBe(text);
           done()
         }).catch ((e) => done(e));
@@ -65,9 +67,10 @@ describe ('GET /todos', () => {
   it ('should get all today', (done) => {
     request(app)
       .get('/todos')
+      .set('x-auth', users[0].tokens[0].token)
       .expect(200)
       .expect((res) => {
-        expect(res.body.todos.length).toBe(3);
+        expect(res.body.todos.length).toBe(2);
       })
       .end(done);
   });
