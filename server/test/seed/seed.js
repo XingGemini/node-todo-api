@@ -40,10 +40,10 @@ const users = [
       _id : userTwoId,
       email : 'xing2@gmail.com',
       password: 'userTwoPass',
-      tokens: [{
-        access:'auth',
-        token: jwt.sign({_id: userOneId, access: 'auth'}, 'abc123').toString()
-      }]
+      // tokens: [{
+      //   access:'auth',
+      //   token: jwt.sign({_id: userTwoId, access: 'auth'}, 'abc123').toString()
+      // }]
     }
 ];
 
