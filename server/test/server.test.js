@@ -231,8 +231,6 @@ describe ('PATCH /todos:id', () => {
         }
 
         Todo.findById(hexId).then((todo) => {
-          console.log(todos[1]);
-          console.log(todo);
           expect(todo.text).toBe(todos[1].text);
           expect(todo.completed).toBe(todos[1].completed);
           expect(todo.completedAt).toBe(todos[1].completedAt);
